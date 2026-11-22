@@ -94,6 +94,7 @@ warden verify
 
 ## Roadmap
 
+- Authenticated approvers (SSO / signed approvals)
 - MCP **proxy** mode: govern any existing MCP server without touching its code
 - Approvals in Slack, Teams and email
 - Per-model cost tracking from LLM usage data
@@ -104,6 +105,8 @@ warden verify
 ## Status
 
 v0.1. Small core, fully tested, meant to be read in an afternoon. Issues and pull requests welcome.
+
+Known limits in v0.1: approver identity comes from `--by` and is not yet authenticated (put the CLI behind your own access controls, or wire approvals to SSO); redaction is pattern-based and is a safety net, not a substitute for keeping sensitive data out of model context by design.
 
 ## License
 
