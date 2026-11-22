@@ -1,4 +1,4 @@
-"""Walk through agent-warden end to end without an LLM.
+"""Walk through agent-countersign end to end without an LLM.
 
 A scripted "billing-bot" agent chases overdue invoices. Watch what the
 gateway allows, blocks, redacts and sends to a human, then check the
@@ -18,7 +18,7 @@ HERE = Path(__file__).parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parents[1] / "src"))
 
-from agent_warden import ApprovalError, Gateway  # noqa: E402
+from agent_countersign import ApprovalError, Gateway  # noqa: E402
 from tools import make_business_db, register_tools  # noqa: E402
 
 AGENT = "billing-bot"
@@ -30,8 +30,8 @@ def show(step: str, result) -> None:
 
 
 def main() -> None:
-    work = Path(tempfile.mkdtemp(prefix="warden-demo-"))
-    gw = Gateway(HERE / "policy.yaml", work / "warden.db")
+    work = Path(tempfile.mkdtemp(prefix="countersign-demo-"))
+    gw = Gateway(HERE / "policy.yaml", work / "countersign.db")
     register_tools(gw, make_business_db(work / "business.db"))
 
     show("Agent lists overdue invoices (allowed: read-only)",
@@ -83,7 +83,7 @@ def main() -> None:
     ok, bad = gw.store.verify_chain()
     print(f"▶ Verify chain: {'intact' if ok else f'TAMPERING DETECTED at event #{bad}'}")
     print(f"\nFiles left in {work} so you can try the CLI, e.g.:\n"
-          f"  warden --db {work / 'warden.db'} audit")
+          f"  countersign --db {work / 'countersign.db'} audit")
 
 
 if __name__ == "__main__":
