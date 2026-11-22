@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "agent-warden"
+name = "agent-countersign"
 version = "0.1.0"
 description = "An open governance layer for AI agents: policies, human approval, PII redaction, spend limits and a tamper-evident audit trail for every tool call."
 readme = "README.md"
@@ -17,7 +17,7 @@ mcp = ["mcp>=2"]
 dev = ["pytest>=8", "mcp>=2"]
 
 [project.scripts]
-warden = "agent_warden.cli:main"
+countersign = "agent_countersign.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
