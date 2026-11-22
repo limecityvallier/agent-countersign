@@ -6,7 +6,7 @@ import sqlite3
 from datetime import date, timedelta
 from pathlib import Path
 
-from agent_warden import Gateway
+from agent_countersign import Gateway
 
 _SEED = [
     # id, name, email, phone, invoice, amount, days overdue
