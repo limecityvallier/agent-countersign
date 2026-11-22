@@ -1,0 +1,35 @@
+# Policy for an accounts-receivable agent at a small business.
+# Read top to bottom: the first rule that matches a call decides it.
+# Anything not covered here is denied.
+
+defaults:
+  decision: deny          # no rule, no action
+  redact_audit: true      # keep emails, phone numbers, SSNs and card numbers out of the log
+  redact_outputs: true    # and out of the model's context
+
+budgets:
+  - agent: "*"
+    daily_usd: 1.00       # tools can carry a cost (API fees, SMS, etc.)
+
+rules:
+  - name: read-only lookups
+    tools: [list_overdue_invoices, get_customer]
+    decision: allow
+
+  - name: no refunds over $500
+    tools: [issue_refund]
+    when:
+      amount: {gt: 500}
+    decision: deny
+    reason: Refunds over $500 must be handled by the controller outside the agent.
+
+  - name: customer emails need a human
+    tools: [send_email]
+    decision: require_approval
+    approvers: [ar-manager, controller]
+    reason: Anything that reaches a customer is reviewed first.
+
+  - name: small refunds need the controller
+    tools: [issue_refund]
+    decision: require_approval
+    approvers: [controller]

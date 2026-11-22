@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-warden"
+version = "0.1.0"
+description = "An open governance layer for AI agents: policies, human approval, PII redaction, spend limits and a tamper-evident audit trail for every tool call."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.10"
+dependencies = ["pyyaml>=6"]
+keywords = ["ai-agents", "governance", "mcp", "audit", "human-in-the-loop", "llm"]
+
+[project.optional-dependencies]
+mcp = ["mcp>=2"]
+dev = ["pytest>=8", "mcp>=2"]
+
+[project.scripts]
+warden = "agent_warden.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
