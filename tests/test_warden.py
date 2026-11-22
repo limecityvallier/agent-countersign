@@ -2,8 +2,8 @@ import asyncio
 
 import pytest
 
-from agent_warden import ApprovalError, Decision, Gateway, Policy, PolicyError, redact
-from agent_warden.cli import main as cli
+from agent_countersign import ApprovalError, Decision, Gateway, Policy, PolicyError, redact
+from agent_countersign.cli import main as cli
 
 POLICY = """
 defaults: {decision: deny}
@@ -140,17 +140,17 @@ def test_cli(gw, tmp_path, capsys):
 
 def test_mcp_adapter(gw):
     pytest.importorskip("mcp")
-    from agent_warden.mcp_adapter import build_server
+    from agent_countersign.mcp_adapter import build_server
 
     server = build_server(gw, agent="bot")
 
     async def run():
         names = {t.name for t in await server.list_tools()}
-        assert {"lookup", "refund", "warden_check_approval"} <= names
+        assert {"lookup", "refund", "countersign_check_approval"} <= names
         res = await server.call_tool("refund", {"customer_id": 1, "amount": 50})
         assert res.structured_content["status"] == "pending"
         gw.approve(res.structured_content["approval_id"], by="controller")
-        res = await server.call_tool("warden_check_approval",
+        res = await server.call_tool("countersign_check_approval",
                                      {"approval_id": res.structured_content["approval_id"]})
         assert res.structured_content["status"] == "executed"
 
